@@ -1,0 +1,3 @@
+Copy the Capacitive Sensor folder into the libraries dir of your arduino install (typically in Program Files(x86)\Arduino).
+
+Restart the Arduino program and it will detect the library.

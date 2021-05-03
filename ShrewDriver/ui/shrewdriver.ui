@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>294</width>
+    <height>652</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ShrewDriver</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Air Puff:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Visual Stim:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Trial Stats:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Sensors:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="cbVisualStim"/>
+    </item>
+    <item row="7" column="1">
+     <widget class="QComboBox" name="cbCameraID"/>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Camera ID:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QComboBox" name="cbSensors"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Animal Name: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Syringe Pump:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="cbAnimalName"/>
+    </item>
+    <item row="9" column="0" colspan="2">
+     <widget class="QPushButton" name="btnStartRecording">
+      <property name="text">
+       <string>Start Recording</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QComboBox" name="cbSyringePump"/>
+    </item>
+    <item row="11" column="0" colspan="2">
+     <widget class="QPlainTextEdit" name="txtTrialStats">
+      <property name="plainText">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QComboBox" name="cbAirPuff"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>294</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,107 @@
+=======================
+Stimbot Serial Commands
+=======================
+
+===============
+System Commands
+===============
+
+Screen on / off: "screenon" will turn the screen on, waking the system up from sleep mode if necessary. "screenoff" will release the sleep mode lock, allowing the screen to turn off once the system engages its sleep mode (typically after a minute or so; see settings on device).
+
+Blonk: "blonk" will make the tablet emit a sound. Good for confirming your serial connection is active. Sound will only be emitted if tablet's volume is turned up.
+
+=============
+Stim Commands
+=============
+
+Screen Distance: "screendist" followed by the distance (millimeters) between the animal's eye and the screen.
+Examples:
+screendist100
+screendist27.5
+
+Patch: A "pa" followed by a color (b for black, w for white, g for gray; r for red, e for green, u for blue; c for cyan, y for yellow, m for magenta). Produces a solid-color patch.
+Examples:
+pab
+paw
+par
+pau
+
+Oriented grating (sinusoidal): A "sin" followed by the desired angle. Lab standard, so 0 is horizontal and + goes clockwise.
+Examples: 
+sin45
+sin13.4
+sin55.555
+
+Oriented grating (square wave): A "sqr" followed by the desired angle. Lab standard, so 0 is horizontal and + goes clockwise.
+Examples: 
+sqr45
+sqr13.4
+sqr55.555
+
+Position: "px" or "py" followed by a position in visual degrees. Positions are relative to the center of the screen. (+x,+y) is the upper right of the screen; (-x,-y) is the lower left.
+Examples:
+px3
+py-2.2
+
+Size: "sx" or "sy" followed by a size in visual degrees.
+Examples:
+sx3
+sy7.5
+
+Aperture: "a" followed by a letter indicating the aperture type. "c" for circle, "g" for gabor, "s" for square. Aperture size and position is determined by stimulus.
+Examples:
+ac
+ag
+as
+
+
+=========================
+Grating-Specific Commands
+=========================
+
+Spatial Frequency: "sf" followed by a number for the spatial frequency in cycles per degree.
+Examples:
+sf4
+sf0.25
+
+Temporal Frequency: "tf" followed by a number for frequency in cycles per second.
+Examples:
+tf1
+tf0.1
+
+Jitter Frequency: "jf" followed by a number. Number controls jitter frequency. 
+Examples:
+jf0.1
+jf0.2
+
+Jitter Amount: "ja" followed by a number. Number controls jitter amount, in terms of the grating's spatial frequency. So 0.1 will jitter the grating by 10% of its spatial period, i.e. between (phase - 5%) and (phase + 5%).
+ja0.1
+ja0.2
+
+Phase: "ph" followed by a number. Used to directly control the phase of a grating. Useful when you want to display static gratings with random phase.
+Examples:
+ph0.234
+ph-0.5
+ph0
+
+===============
+Command Strings
+===============
+
+You might not want to build your stim one step at a time, because frames render constantly. Instead, enter multiple commands at once, separated by a space.
+
+Examples:
+sqr22.5 ag sx5 sy5 px0 py0 sf0.75 tf0.2
+pab ac sx2 sy2 px3 py-2
+
+Want to save a command to a shorter name? Use "save", then a positive whole number 0-99, then the command string. Note that saving a command does not affect the stim; things only happen when you use it later. When setting up several saved commands, wait 100ms between each command, or parts of the messages may be lost in transit.
+Examples:
+save0 pau ar sx3 sy3 px3 py0
+save1 pab as sx0 sy0 px0 py0
+save33 sqr45 af tf1.0 sf0.5
+
+Then you can use a command by its number. This will give a faster response time than sending the whole long command string.
+Examples:
+0
+1
+33
