@@ -4,7 +4,7 @@ p2
 (lp3
 sS'animalID'
 p4
-S'Generic'
+S'Blossom'
 p5
 sS'pupil_position'
 p6
@@ -43,7 +43,7 @@ S'None'
 p15
 sS'session_path'
 p16
-S'C:\\ShrewData\\Generic\\2021-05-03\\0017\\Generic_2021-05-03_17'
+S'C:\\ShrewData\\Blossom\\2021-05-05\\0001\\Blossom_2021-05-05_1'
 p17
 sS'cr_position'
 p18

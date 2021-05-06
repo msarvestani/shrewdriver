@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GrabCallbackEx_VB.Net", "GrabCallbackEx_VB.Net.vbproj", "{D68195FD-27E0-4CFC-AC2F-704587504F1D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Debug|x64.ActiveCfg = Debug|x64
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Debug|x64.Build.0 = Debug|x64
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Debug|x86.ActiveCfg = Debug|x86
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Debug|x86.Build.0 = Debug|x86
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Release|x64.ActiveCfg = Release|x64
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Release|x64.Build.0 = Release|x64
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Release|x86.ActiveCfg = Release|x86
+		{D68195FD-27E0-4CFC-AC2F-704587504F1D}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
