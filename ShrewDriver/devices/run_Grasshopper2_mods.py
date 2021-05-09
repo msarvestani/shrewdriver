@@ -121,37 +121,31 @@ class runGrasshopper2:
         #self.c.setProperty(type=PyCapture2.PROPERTY_TYPE.BRIGHTNESS, absValue=self.brightness)
 
         # Enable camera embedded timestamp
-        #self.enableEmbeddedTimeStamp(self.c, True)
+        self.enableEmbeddedTimeStamp(self.c, True)
 
         # Check config and grab mode
+
         config = PyCapture2.Config()
         gmode = PyCapture2.GRAB_MODE()
         self.c.setConfiguration(grabMode=gmode.DROP_FRAMES)
 
         # ------------------ Set up ROI selection ------------------ #
-        self.display_vid = kwargs.get('display_vid', False)
+        self.display_vid = kwargs.get('display_vid', True)
         # if no selection made, then ROI is full frame
         self.ROI = kwargs.get("roi", [])
         # if we only want to deal with the ROI (both display and save)
         self.only_roi = kwargs.get('only_roi', False)
 
-        # ------------------ Set up cv2 VideoWriter object for saving ------------------ #
+
+        # ------------------ Set up cv2 VideoWriter object for saving ----------------- #
+        self.video = PyCapture2.FlyCapture2Video()
+
         if self.save:
-            # Save as .avi with MJPG encoding
-            #fourcc = cv2.cv.CV_FOURCC(*'MJPG')
-            fourcc = cv2.VideoWriter_fourcc(*'MJPG') #changed with opencv3
             if not self.only_roi:
-                self.video = cv2.VideoWriter(self.vidPath, fourcc,
-                                             self.framerate,
-                                             (self.width, self.height),
-                                             False)
-                #print('saving whole frame')
+                self.video.AVIOpen(self.vidPath, self.framerate)
             elif self.only_roi:
-                self.video = cv2.VideoWriter(self.vidPath, fourcc,
-                                             self.framerate,
-                                             (self.ROI[1][0]-self.ROI[0][0], self.ROI[1][1] - self.ROI[0][1]),
-                                             False)
-                #print('saving roi')
+                self.video = cv2.VideoWriter(self.vidPath, fourcc, self.framerate, (self.ROI[1][0]-self.ROI[0][0], self.ROI[1][1]-self.ROI[0][1]), False)
+
 
     def enableEmbeddedTimeStamp(self, cam, enableTimeStamp):
         embeddedInfo = cam.getEmbeddedImageInfo()
@@ -167,13 +161,7 @@ class runGrasshopper2:
         self.c.startCapture()
 
     def dequeue(self, **kwargs):
-        """
-        Args:
-            **kwargs: optional flag to return only the image without other info
-
-        Returns: image (as numpy array), frame number, timestamp
-        """
-
+        #image = self.cam.retrieveBuffer()
         image = self.c.retrieveBuffer()
         im = reshape(array(image.getData(), dtype=uint8), (480, 640))
 
@@ -183,67 +171,31 @@ class runGrasshopper2:
         #self.ts = self.ts.cycleSeconds
 
 
-        #if 'send' in kwargs:
-            #return im
+        if 'send' in kwargs:
+            return im
         self.ts = time.time()
         self.frame_num += 1
-        return im, self.frame_num,self.ts
+        return im, self.frame_num,self.ts, image
 
     def _add_to_ext_q(self, data):
-        """Adds data in the form of a dictionary to a queue to be processed
-        by image_processing.SubpixelStarburstEyeFeatureFinder via
-        ui.preview_fit."""
         self.out_q.put(data)
 
     def _garbage_collector(self, data):
         del data
 
     def acquire(self):
-        """Threaded function called by self.start_threads() that calls
-        self.dequeue(). Takes the frame, frame number, and timestamp, stores
-        them in a dictionary, and passes them to an internal queue for either
-        display or deletion."""
         while not self.acquire_stopFlag:
-            frame, num, ts = self.dequeue()
-            self.internal_q.put({'frame': frame, 'frame_number': num, 'timestamp': ts})
+            frame, num, ts, image = self.dequeue()
+            self.internal_q.put({'frame': frame, 'frame_number': num, 'timestamp': ts, 'image': image})
 
-    def _save_vid(self, frame):
-        self.video.write(frame)
-
-    def display_loop(self):
-
-        while not self.display_stopFlag:
-            data = self.internal_q.get()
-            frame = data['frame']
-            # Restrict frame to roi
-            if self.ROI:
-                data['frame'] = frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]]
-
-            # If we are viewing videos
-            if not self.only_roi and self.display_vid:
-                self._save_method(frame)
-                cv2.imshow(self.animalname + 'Eye Tracking Cam', frame)
-            elif self.only_roi and self.display_vid:
-                self._save_method(frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]])
-                cv2.imshow(self.animalname + 'Eye Tracking Cam', frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]])
-
-            # If we aren't viewing acquired videos
-            elif not self.only_roi and not self.display_vid:
-                self._save_method(frame)
-            elif self.only_roi and not self.display_vid:
-                self._save_method(frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]])
-
-            cv2.waitKey(1) & 0xFF
-            self._output_method(data)
-
-        self.acquire_stopFlag = True
-        time.sleep(0.1)
-        self.stopCapture()
-
+    def _save_vid(self, image):
+        #self.video.write(frame)
+        self.video.append(image)
 
     def stopCapture(self):
         if self.save:
-            self.video.release()
+            #self.video.release()
+            self.video.close()
         self.c.stopCapture()
         self.c.disconnect()
         cv2.destroyWindow(self.animalname + 'Eye Tracking Cam')
@@ -261,6 +213,39 @@ class runGrasshopper2:
         print 'Starting camera display...'
         display_thread.start()
 
+    def display_loop(self):
+
+        while not self.display_stopFlag:
+            data = self.internal_q.get()
+            frame = data['frame']
+            image = data['image']
+
+            # frame = random.rand(480, 640) * 255
+            # data['frame'] = frame
+            # Restrict frame to roi
+            if self.ROI:
+                data['frame'] = frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]]
+
+            # If we are viewing videos
+            if not self.only_roi and self.display_vid:
+                self._save_method(image)
+                cv2.imshow(self.animalname + 'Eye Tracking Cam', frame)
+            elif self.only_roi and self.display_vid:
+                self._save_method(frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]])
+                cv2.imshow(self.animalname + 'Eye Tracking Cam', frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]])
+
+            # If we aren't viewing acquired videos
+            elif not self.only_roi and not self.display_vid:
+                self._save_method(image)
+            elif self.only_roi and not self.display_vid:
+                self._save_method(frame[self.ROI[0][1]:self.ROI[1][1], self.ROI[0][0]:self.ROI[1][0]])
+
+            cv2.waitKey(0) & 0xFF
+            self._output_method(data)
+
+        self.acquire_stopFlag = True
+        time.sleep(0.1)
+        self.stopCapture()
 
 if __name__ == '__main__':
 
@@ -269,38 +254,30 @@ if __name__ == '__main__':
     from image_processing.ROISelect import *
 
     mode = 1
-    vidPath = "C:/ShrewData/Blossom/newvid.avi"
-    #vidPath =None
+    vidPath = 'C:/users/mccannm/Desktop/newvid.avi'
     im_q = Queue()
 
     get_roi = ROISelect('Point_Grey')
     get_roi.findROI()
     verticesROI, frame_size, pupil, cr, _ = get_roi.getData()
-    gh = runGrasshopper2(mode, animalName='Dummy', framerate=60, vidPath=vidPath, output_queue=im_q, only_roi=False)
+    gh = runGrasshopper2(mode, animalName='Dummy', framerate=60, vidPath=None, output_queue=im_q, only_roi=False)
 
     gh.startThreads()
     tic = time.time()
     while True:
         data = im_q.get()
+      #  print(time.ctime(data['timestamp']))
         frame = data['frame']
-        print(data['frame_number'])
-        #cv2.imshow('ROI', frame)
-        #key = cv2.waitKey(1) & 0xFF
-        #if key == ord('q'):
-            #break
 
-        if data['frame_number']==60*10:
+        cv2.imshow('ROI', frame)
+        key = cv2.waitKey(0) & 0xFF
+        if key == ord('q'):
             break
 
-    toc = time.time()
     gh.stopFlag = True
-    time.sleep(.1)
+    time.sleep(1)
 
-    #tot = data['timestamp']-tic
-    tot = toc - tic
+    tot = data['timestamp']-tic
     fr = data['frame_number'] / tot
     print 'Finished with ' + str(gh.frame_num) + ' frames processed in ' + str(tot) + ' seconds.'
     print 'Mean frame rate of ' + str(fr) + ' fps.'
-    print('gh says: '+ str(gh.frame_num) +' frames and '+time.ctime(gh.ts))
-    print('data says: '+ str(data['frame_number']) +' frames and '+time.ctime(data['timestamp']))
-

@@ -20,11 +20,11 @@
 
 import sys
 import cv2
-from numpy import zeros_like, vstack, concatenate, array
+from numpy import zeros_like, vstack, concatenate, asanyarray, reshape, array
 sys.path.append("..")
 from devices.camera_reader import *
 try:
-    from devices.run_Grasshopper import *
+    from devices.run_Grasshopper2 import *
 except:
 
     pass
@@ -45,7 +45,7 @@ class ROISelect:
         # setup super basic camera reader to grab frames
         if cameraID == 'Point_Grey':
             self._get_image = self.loopImage
-            self.cr = runGrasshopper(1)
+            self.cr = runGrasshopper2(1)
             self.cam_type = cameraID
             self.cr.start_cap()
 
@@ -175,9 +175,9 @@ class ROISelect:
                 self.image = self.cr.readFrame(send=True)
 
             elif self.cam_type == 'Point_Grey':
-                self.image = fc2.Image()
-                self.cr.c.retrieve_buffer(self.image)
-                self.image = asarray(self.image)
+                #self.image = fc2.Image()# this only works with run_Grasshopper
+                self.image = self.cr.c.retrieveBuffer()
+                self.image = reshape(array(self.image.getData(), dtype=uint8), (self.image.getRows(), self.image.getCols()))
 
             self.clone = self.image.copy()
             frame = self.image.copy()
@@ -197,7 +197,8 @@ class ROISelect:
                 if self.cam_type == 'Webcam':
                     self.cr.stopCapture()
                 elif self.cam_type == 'Point_Grey':
-                    self.cr.c.stop_capture()
+                    self.cr.c.stopCapture()
+
 
                 self.camera_on = False
                 cv2.destroyWindow('Live Feed')
@@ -434,7 +435,7 @@ class ROISelect:
 
 if __name__ == '__main__':
     cameraID = 'video'
-    #cameraID = 'Point_Grey'
+    cameraID = 'Point_Grey'
     roi = ROISelect(cameraID, vidPath='C:\Users\mccannm\Documents\Data\Qbert/t00028/t00028\Qbert_t00028_conv.avi')
     roi.findROI()
     refPt, roi_diff, pupil, cr, _ = roi.getData()

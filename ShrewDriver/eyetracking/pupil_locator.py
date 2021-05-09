@@ -126,7 +126,8 @@ class PupilLocator:
             # Set framerate at which video is saved
             self.frameRate = 60
             # Save as .avi with MJPG codec
-            fourcc = cv2.cv.CV_FOURCC(*'MJPG')
+            #fourcc = cv2.cv.CV_FOURCC(*'MJPG')
+            fourcc = cv2.VideoWriter_fourcc(*'MJPG')
             self.filename = filename
             vidPath = str(path[0]) + "_pupil_track.avi"
             self.video = cv2.VideoWriter(vidPath, fourcc, self.frameRate,

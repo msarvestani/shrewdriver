@@ -12,7 +12,7 @@ import sys
 sys.path.append("..")
 from devices.camera_reader import *
 try:
-    from devices.run_Grasshopper import *
+    from devices.run_Grasshopper2 import *
 except:
 
     pass
@@ -40,7 +40,7 @@ class RunCalibrator:
         elif self.cameraID != "None" and self.cameraID == 'Point_Grey':
 
             mode = 1
-            self.eyeCameraReader = runGrasshopper(mode, animalName=self.animalName, framerate=60, only_roi=True)
+            self.eyeCameraReader = runGrasshopper2(mode, animalName=self.animalName, framerate=60, only_roi=True)
             self.shrewDriver.calibrator.camera = self.eyeCameraReader
             self.shrewDriver.calibrator.camera_type = self.cameraID
             self.shrewDriver.calibrator.center_camera_frame = [self.eyeCameraReader.height / 2, self.eyeCameraReader.width / 2]
