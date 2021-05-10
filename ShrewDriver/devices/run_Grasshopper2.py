@@ -145,13 +145,12 @@ class runGrasshopper2:
                                              self.framerate,
                                              (self.width, self.height),
                                              False)
-                #print('saving whole frame')
             elif self.only_roi:
                 self.video = cv2.VideoWriter(self.vidPath, fourcc,
                                              self.framerate,
                                              (self.ROI[1][0]-self.ROI[0][0], self.ROI[1][1] - self.ROI[0][1]),
                                              False)
-                #print('saving roi')
+
 
     def enableEmbeddedTimeStamp(self, cam, enableTimeStamp):
         embeddedInfo = cam.getEmbeddedImageInfo()
@@ -177,6 +176,7 @@ class runGrasshopper2:
         image = self.c.retrieveBuffer()
         im = reshape(array(image.getData(), dtype=uint8), (480, 640))
 
+
         # self.ts = self.ts.cycleSeconds
         # timestamp info is weird here, but let's go anyways
         #self.ts = image.getTimeStamp()
@@ -200,6 +200,7 @@ class runGrasshopper2:
 
     def acquire(self):
         """Threaded function called by self.start_threads() that calls
+
         self.dequeue(). Takes the frame, frame number, and timestamp, stores
         them in a dictionary, and passes them to an internal queue for either
         display or deletion."""
@@ -209,6 +210,7 @@ class runGrasshopper2:
 
     def _save_vid(self, frame):
         self.video.write(frame)
+
 
     def display_loop(self):
 
@@ -244,6 +246,7 @@ class runGrasshopper2:
     def stopCapture(self):
         if self.save:
             self.video.release()
+
         self.c.stopCapture()
         self.c.disconnect()
         cv2.destroyWindow(self.animalname + 'Eye Tracking Cam')
@@ -270,7 +273,7 @@ if __name__ == '__main__':
 
     mode = 1
     vidPath = "C:/ShrewData/Blossom/newvid.avi"
-    #vidPath =None
+    vidPath =None
     im_q = Queue()
 
     get_roi = ROISelect('Point_Grey')
@@ -284,17 +287,17 @@ if __name__ == '__main__':
         data = im_q.get()
         frame = data['frame']
         print(data['frame_number'])
-        #cv2.imshow('ROI', frame)
-        #key = cv2.waitKey(1) & 0xFF
-        #if key == ord('q'):
-            #break
-
-        if data['frame_number']==60*10:
+        cv2.imshow('ROI', frame)
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'):
             break
 
-    toc = time.time()
+        # if data['frame_number']==60*10:
+        #     break
+
     gh.stopFlag = True
-    time.sleep(.1)
+    time.sleep(1)
+    toc = time.time()
 
     #tot = data['timestamp']-tic
     tot = toc - tic

@@ -39,7 +39,7 @@ else:
 
 # Cameras
 from devices.camera_reader import *
-from devices.run_Grasshopper2 import *
+from devices.run_Grasshopper import *
 from devices.video_file_reader import *
 
 # eye tracking stuff
@@ -599,7 +599,7 @@ class PreviewFitUI(QtGui.QMainWindow, Preview_class):
         elif self.cameraID == 'Point_Grey':
             try:
                 mode = 1
-                self.CameraReader = runGrasshopper2(mode, vidPath=self.vidPath,
+                self.CameraReader = runGrasshopper(mode, vidPath=self.vidPath,
                                                    roi=self.ROI,
                                                    animalName=self.animalName,
                                                    display_vid=True,

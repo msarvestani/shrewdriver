@@ -46,7 +46,7 @@ from image_processing.SubpixelStarburstEyeFeatureFinder import *
 # Cameras
 from devices.camera_reader import *
 try:
-    from devices.run_Grasshopper2 import *
+    from devices.run_Grasshopper import *
 except:
 
     pass
