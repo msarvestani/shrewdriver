@@ -14,4 +14,4 @@ Visual stimuli for monitors using the PsychoPy library. ShrewDriver can also dis
 Firmware for the electronic components (sensors, syringe pump, and air puff) is in the Arduino directory.
 "# shrewdriver" 
 
-Eyetracking camera is PointGrey, controlled by flycpature which integrates with python. See notes on on setting up flycapture2 using python 2.7 [here] (https://docs.google.com/document/d/1mZ2dGPB34mWH2FYYXsnw2rjmyVcFWtj5UnZAEjEzjXg/edit#heading=h.qheoagm4vwag)
+Eyetracking camera is PointGrey, controlled by flycpature which integrates with python. See notes on on setting up flycapture2 using python 2.7 [here](https://docs.google.com/document/d/1mZ2dGPB34mWH2FYYXsnw2rjmyVcFWtj5UnZAEjEzjXg/edit#heading=h.qheoagm4vwag)
